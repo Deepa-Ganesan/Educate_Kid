@@ -31,14 +31,24 @@ router.get('/', async (req, res) => {
 });
 
 // Endpoint to fetch scholarship details by ID
-router.get('/:id', async (req, res) => {
+// router.get('/:id', async (req, res) => {
+//   try {
+//     const scholarship = await Scholarship.findById(req.params.id);
+//     res.status(200).json(scholarship);
+//   } catch (error) {
+//     console.error('Error fetching scholarship details:', error);
+//     res.status(500).json('Failed to fetch scholarship detail');
+//   }
+// });
+ 
+// Route to get the total count of scholarships
+router.get('/count', async (req, res) => {
   try {
-    const scholarship = await Scholarship.findById(req.params.id);
-    res.status(200).json(scholarship);
+    const count = await Scholarship.countDocuments();
+    console.log(count);
+    res.json({ count });
   } catch (error) {
-    console.error('Error fetching scholarship details:', error);
-    res.status(500).json('Failed to fetch scholarship details');
+    res.status(500).json({ message: 'Server error' });
   }
 });
-
 module.exports = router;

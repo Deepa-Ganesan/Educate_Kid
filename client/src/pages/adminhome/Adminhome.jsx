@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { useNavigate, useParams } from 'react-router-dom';
 import './adminhome.css';
@@ -10,16 +10,36 @@ import { CategoryScale } from 'chart.js';
 Chart.register(CategoryScale);
 
 const AdminHome = () => {
-  const { state } = useParams(); // Access state parameter from URL
+  const { state } = useParams();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scholarshipCount, setScholarshipCount] = useState(0);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchScholarshipCount = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/scholarships/count');
+        console.log(response);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        console.log(data);
+        setScholarshipCount(data.count);
+      } catch (error) {
+        console.error('Error fetching scholarship count:', error);
+      }
+    };
+
+    fetchScholarshipCount();
+  }, []);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
 
   const goToHome = () => {
-    navigate(`/adminhome/${state}`); // Ensure state parameter is passed correctly
+    navigate(`/adminhome/${state}`);
   };
 
   const chartData = {
@@ -54,7 +74,7 @@ const AdminHome = () => {
   const recentInstitutes = [
     {
       name: 'ABC Institute',
-      code: 'INST123',
+      code: 'INST123',              
     },
     {
       name: 'XYZ Institute',
@@ -78,7 +98,7 @@ const AdminHome = () => {
         <div className="stats-boxes1">
           <div className="boxi">
             <h3>Total Scholarships</h3>
-            <p>123</p>
+            <p>{scholarshipCount}</p>
           </div>
           <div className="boxi">
             <h3>Total Pending Students</h3>

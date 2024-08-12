@@ -1,9 +1,12 @@
+ // server.js
+
 const express = require('express');
 const dotenv = require('dotenv').config();
 const connectDB = require('./src/database/db');
 const cors = require('cors');
 const path = require('path');
 const app = express();
+
 connectDB();
 
 app.use(cors());
@@ -18,12 +21,13 @@ const formRoutes = require('./src/routes/formRoutes');
 const scholarshipRoutes = require('./src/routes/scholarshipRoutes');
 const adminRoutes = require('./src/routes/admin');
 const scholarshipHistory = require('./src/routes/scholarshipHistory');
+
 // Use the routes
 app.use('/api/users', authRoutes);
 app.use('/api/form', formRoutes);
-app.use('/api/scholarships', scholarshipRoutes); // Corrected path
+app.use('/api/scholarships', scholarshipRoutes);
 app.use('/api/admin', adminRoutes);
-app.use('/api/scholarshipHistory',scholarshipHistory);
+app.use('/api/scholarshipHistory', scholarshipHistory);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
